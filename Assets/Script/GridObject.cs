@@ -1,16 +1,32 @@
 using UnityEngine;
 
-public class GridObejct : MonoBehaviour
+
+public enum GridObjectType
 {
+    Player,
+    Wall,
+    Monster,
+    Deflector,
+    None,
+}
+
+public class GridObject : MonoBehaviour
+{
+    public GridObjectType type;
+    public PlayerController player;
     public World world;
     public int x, y;
+    public Bullet bullet;
+
     void Awake()
     {
         world = GameObject.Find("World").GetComponent<World>();
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
         if (world == null)
         {
             Debug.LogError("World component not found!");
         }
+
     }
 
     public void Move(Vector3Int direction)
@@ -29,4 +45,11 @@ public class GridObejct : MonoBehaviour
             transform.position = world.GetWorldPosition(x, y);
         }
     }
+    public virtual void Hit()
+    {
+
+    }
+
+
 }
+
