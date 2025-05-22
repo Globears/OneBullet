@@ -32,7 +32,11 @@ public class Deflector : GridObject
 
     public void OnHit()
     {
-
+        Debug.Log("Hit");
+        int newDx = -bullet.dy;
+        int newDy = bullet.dx;
+        bullet.dx = newDx;
+        bullet.dy = newDy;
     }
 
     public void OnBulletFlyingStart(int fromX, int fromY, int newX, int newY)

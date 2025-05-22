@@ -20,6 +20,7 @@ public class Bullet : MonoBehaviour
 
     public void Fly()
     {
+        Debug.Log("Fly");
         StartCoroutine(FlyCoroutine());
     }
     IEnumerator FlyCoroutine()

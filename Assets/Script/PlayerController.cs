@@ -27,8 +27,6 @@ public class PlayerController : GridObject
         int fromX = x;
         int fromY = y;
 
-        if (world.GetGridObjectAt(newX, newY).type != GridObjectType.None
-        && world.GetGridObjectAt(newX, newY).type != GridObjectType.Ground) yield break;
 
         MovingStart?.Invoke(fromX, fromY, newX, newY);
 
@@ -43,7 +41,7 @@ public class PlayerController : GridObject
             }
             yield return null;
         }
-        
+
         x = newX;
         y = newY;
         transform.position = world.CellToWorldPosition(x, y);
@@ -61,31 +59,43 @@ public class PlayerController : GridObject
 
     void HandleInput()
     {
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            Move(0, 1);
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
-        {
-            Move(0, -1);
-        }
-        else if (Input.GetKeyDown(KeyCode.A))
-        {
-            Move(-1, 0);
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            Move(1, 0);
-        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
             Fire?.Invoke();
             bullet.x = x;
             bullet.y = y;
-            bullet.dx = dx;
-            bullet.dy = dy;
+            bullet.dx = this.dx;
+            bullet.dy = this.dy;
         }
+
+        int dx = 0;
+        int dy = 0;
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            dy = 1;
+        }
+        else if (Input.GetKeyDown(KeyCode.S))
+        {
+            dy = -1;
+        }
+        else if (Input.GetKeyDown(KeyCode.A))
+        {
+            dx = -1;
+        }
+        else if (Input.GetKeyDown(KeyCode.D))
+        {
+            dx = 1;
+        }
+        if (dx == 0 && dy == 0) return;
+        int newX = x + dx;
+        int newY = y + dy;
+        if (world.GetGridObjectAt(newX, newY).type != GridObjectType.None
+            && world.GetGridObjectAt(newX, newY).type != GridObjectType.Ground) return;
+        if (isAnimatingMove) return;
+        Move(dx, dy);
+
+        
     }
 
 
