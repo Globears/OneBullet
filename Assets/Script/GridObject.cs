@@ -15,12 +15,10 @@ public enum GridObjectType
 public class GridObject : MonoBehaviour
 {
     public GridObjectType type;
-    public World world;
     public int x, y;
 
     void Start()
     {
-        world = GameObject.Find("World").GetComponent<World>();
 
     }
 

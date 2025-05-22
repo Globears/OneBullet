@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -8,6 +9,15 @@ public class World : MonoBehaviour
     public Grid grid;
     Tilemap tilemap;
     List<GridObject> gridObjects = new List<GridObject>();
+    static GridObject air;
+
+    [InitializeOnLoadMethod]
+    static void Init()
+    {
+        instance = GameObject.Find("World").GetComponent<World>();
+
+        air = instance.GetComponent<GridObject>();
+    }
 
     void RegisterAllGridObjects()
     {
@@ -39,13 +49,17 @@ public class World : MonoBehaviour
                 return gridObject;
             }
         }
-        return null;
+        return air;
+    }
+
+    void Awake()
+    {
+        instance = this;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        instance = this;
         tilemap = transform.Find("Tilemap").GetComponent<Tilemap>();
         RegisterAllGridObjects();
     }

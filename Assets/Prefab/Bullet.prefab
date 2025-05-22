@@ -104,3 +104,4 @@ MonoBehaviour:
   y: 0
   dx: 0
   dy: 0
+  speed: 6

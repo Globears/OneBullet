@@ -3,18 +3,23 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class AutoSnapToGrid : MonoBehaviour
 {
-    GridObject gridObject;
     World world;
+    GridObject gridObject;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
-        world = GameObject.Find("World").GetComponent<World>();
+        world = World.instance;
         gridObject = GetComponent<GridObject>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Application.isPlaying)
+        {
+            this.enabled = false;
+        }
         Vector3Int CellPosition = world.WorldToCellPosition(transform.position);
         transform.position = world.CellToWorldPosition(CellPosition.x, CellPosition.y);
         if (gridObject != null)
@@ -23,4 +28,5 @@ public class AutoSnapToGrid : MonoBehaviour
             gridObject.y = CellPosition.y;
         }
     }
+    
 }
