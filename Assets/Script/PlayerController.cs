@@ -24,8 +24,6 @@ public class PlayerController : GridObject
         int newY = y + dy;
         int fromX = x;
         int fromY = y;
-        x = newX;
-        y = newY;
 
         if (world.GetGridObjectAt(newX, newY).type != GridObjectType.None
         && world.GetGridObjectAt(newX, newY).type != GridObjectType.Ground) yield break;
@@ -45,7 +43,8 @@ public class PlayerController : GridObject
         }
 
         transform.position = world.CellToWorldPosition(x, y);
-
+        x = newX;
+        y = newY;
         MovingFinish?.Invoke(fromX, fromY, newX, newY);
         isAnimatingMove = false;
         yield return null;

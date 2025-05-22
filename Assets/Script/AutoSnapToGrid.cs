@@ -13,20 +13,26 @@ public class AutoSnapToGrid : MonoBehaviour
         gridObject = GetComponent<GridObject>();
     }
 
+
+
     // Update is called once per frame
     void Update()
     {
+        
         if (Application.isPlaying)
         {
             this.enabled = false;
         }
         Vector3Int CellPosition = world.WorldToCellPosition(transform.position);
         transform.position = world.CellToWorldPosition(CellPosition.x, CellPosition.y);
+        
         if (gridObject != null)
         {
             gridObject.x = CellPosition.x;
             gridObject.y = CellPosition.y;
         }
     }
-    
+
 }
+
+
