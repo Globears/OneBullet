@@ -4,76 +4,49 @@ using UnityEngine.Tilemaps;
 
 public class World : MonoBehaviour
 {
+    public static World instance;
     public Grid grid;
-    Tilemap groundTile, wallTile, objectsTile;
+    Tilemap tilemap;
     List<GridObject> gridObjects = new List<GridObject>();
 
-    public bool hasObject(int x, int y)
-    {
-        foreach (var obj in gridObjects)
-        {
-            if (obj.x == x && obj.y == y)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public bool hasWall(int x, int y)
-    {
-        return wallTile.HasTile(new Vector3Int(x, y, 0));
-    }
-
-    public bool IsValidPosition(int x, int y)
-    {
-        // Check if the position is within the bounds of the world
-        if (wallTile.HasTile(new Vector3Int(x, y, 0)))
-        {
-            return false;
-        }
-        if (hasObject(x, y))
-        {
-            return false;
-        }
-
-        return true;
-    }
-    public Vector3 GetWorldPosition(int x, int y)
-    {
-        // Convert grid coordinates to world coordinates
-        return grid.CellToLocal(new Vector3Int(x, y, 0)) + grid.cellSize / 2;
-    }
     void RegisterAllGridObjects()
     {
-        // Get all grid objects in the world
-        for (int i = 0; i < objectsTile.transform.childCount; i++)
+        for (int i = 0; i < tilemap.transform.childCount; i++)
         {
-            gridObjects.Add(objectsTile.transform.GetChild(i).GetComponent<GridObject>());
+            GridObject gridObject = tilemap.transform.GetChild(i).GetComponent<GridObject>();
+            gridObjects.Add(gridObject);
         }
     }
-    public GridObjectType GetGridAt(int x, int y)
+
+    public Vector3 CellToWorldPosition(int x, int y)
     {
-        if (wallTile.HasTile(new Vector3Int(x, y, 0)))
+        Vector3Int cellPosition = new Vector3Int(x, y, 0);
+        return grid.GetCellCenterWorld(cellPosition);
+    }
+
+    public Vector3Int WorldToCellPosition(Vector3 worldPosition)
+    {
+        Vector3Int cellPosition = grid.WorldToCell(worldPosition);
+        return cellPosition;
+    }
+
+    public GridObject GetGridObjectAt(int x, int y)
+    {
+        foreach (GridObject gridObject in gridObjects)
         {
-            return GridObjectType.Wall;
-        }
-        foreach (var obj in gridObjects)
-        {
-            if (obj.x == x && obj.y == y)
+            if (gridObject.x == x && gridObject.y == y)
             {
-                return obj.GetComponent<GridObject>().type;
+                return gridObject;
             }
         }
-        return GridObjectType.None;
+        return null;
     }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Awake()
+    void Start()
     {
-        grid = GetComponent<Grid>();
-        groundTile = transform.Find("Ground").GetComponent<Tilemap>();
-        wallTile = transform.Find("Wall").GetComponent<Tilemap>();
-        objectsTile = transform.Find("Objects").GetComponent<Tilemap>();
+        instance = this;
+        tilemap = transform.Find("Tilemap").GetComponent<Tilemap>();
         RegisterAllGridObjects();
     }
 

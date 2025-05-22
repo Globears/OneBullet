@@ -1,20 +1,26 @@
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
+using UnityEngine.XR;
 
 public class PlayerController : GridObject
 {
-    public delegate void FireHandler(Bullet bullet);
-    public event FireHandler OnFire;
-    public GameObject bulletPrefab;
-    public int dx = -1, dy = -1;
-
-    void Fire()
+    public int dx, dy;
+    public Bullet bulletPrefab;
+    public void Move(int dx, int dy)
     {
-        Bullet bullet = Instantiate(bulletPrefab).GetComponent<Bullet>();
-        bullet.dx = dx;
-        bullet.dy = dy;
-        bullet.x = x;
-        bullet.y = y;
-        OnFire?.Invoke(bullet);
+        this.dx = dx;
+        this.dy = dy;
+        int newX = x + dx;
+        int newY = y + dy;
+
+        if (world.GetGridObjectAt(newX, newY) == null || world.GetGridObjectAt(newX, newY).type == GridObjectType.Ground)
+        {
+            x = newX;
+            y = newY;
+            transform.position = world.CellToWorldPosition(x, y);
+        }
+
+
     }
 
     void HandleInput()
@@ -22,41 +28,30 @@ public class PlayerController : GridObject
         if (Input.GetKeyDown(KeyCode.W))
         {
             Move(0, 1);
-            dy = 1;
-            dx = 0;
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
             Move(0, -1);
-            dy = -1;
-            dx = 0;
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
             Move(-1, 0);
-            dx = -1;
-            dy = 0;
-            transform.localScale = new Vector3(-1, 1, 1);
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
             Move(1, 0);
-            dx = 1;
-            dy = 0;
-            transform.localScale = new Vector3(1, 1, 1);
         }
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            Fire();
-        }
-    }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
+            Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            bullet.x = x;
+            bullet.y = y;
+            bullet.dx = dx;
+            bullet.dy = dy; 
+        }  
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         HandleInput();
