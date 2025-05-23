@@ -14,9 +14,17 @@ public class Bullet : MonoBehaviour
     public int dx, dy;
     public float speed = 6f; //unit per second
 
-    public delegate void FlyingHandler(int fromX, int fromY, int newX, int newY);
+    public delegate void FlyingHandler(int fromX, int fromY, int newX, int newY, Bullet bullet);
     public event FlyingHandler FlyingStart, FlyingFinish;
 
+
+
+    public void SetDirection(int dx, int dy)
+    {
+        this.dx = dx;
+        this.dy = dy;
+        transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(dy, dx) * Mathf.Rad2Deg);
+    }
 
     public void Fly()
     {
@@ -30,7 +38,7 @@ public class Bullet : MonoBehaviour
         int newX = x + dx;
         int newY = y + dy;
 
-        FlyingStart?.Invoke(fromX, fromY, newX, newY);
+        FlyingStart?.Invoke(fromX, fromY, newX, newY, this);
         while (true)
         {
             Vector3 targetPosition = world.CellToWorldPosition(newX, newY);
@@ -49,7 +57,7 @@ public class Bullet : MonoBehaviour
         transform.position = world.CellToWorldPosition(newX, newY);
         x = newX;
         y = newY;
-        FlyingFinish?.Invoke(fromX, fromY, newX, newY);
+        FlyingFinish?.Invoke(fromX, fromY, newX, newY, this);
         StartCoroutine(FlyCoroutine());
     }
 

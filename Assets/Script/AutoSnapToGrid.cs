@@ -9,7 +9,7 @@ public class AutoSnapToGrid : MonoBehaviour
 
     void Start()
     {
-        world = World.instance;
+        world = GameObject.Find("World").GetComponent<World>();
         gridObject = GetComponent<GridObject>();
     }
 

@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 
@@ -17,12 +18,6 @@ public class GridObject : MonoBehaviour
     public GridObjectType type;
     public int x, y;
 
-    void Start()
-    {
-
-    }
-
-    
 
 
 }

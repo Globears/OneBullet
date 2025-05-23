@@ -9,7 +9,7 @@ public class AutosortingOrder : MonoBehaviour
     SpriteRenderer spriteRenderer;
     void Start()
     {
-        world = World.instance;
+        world = GameObject.Find("World").GetComponent<World>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
     void Update()

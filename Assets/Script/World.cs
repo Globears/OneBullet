@@ -11,13 +11,7 @@ public class World : MonoBehaviour
     List<GridObject> gridObjects = new List<GridObject>();
     static GridObject air;
 
-    [InitializeOnLoadMethod]
-    static void Init()
-    {
-        instance = GameObject.Find("World").GetComponent<World>();
-
-        air = instance.GetComponent<GridObject>();
-    }
+    
 
     void RegisterAllGridObjects()
     {
@@ -55,6 +49,7 @@ public class World : MonoBehaviour
     void Awake()
     {
         instance = this;
+        air = GetComponent<GridObject>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
