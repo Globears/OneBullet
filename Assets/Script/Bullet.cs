@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public static Bullet instance;
     private void Awake()
     {
-        instance = this;
     }
 
     World world;
+    TrailRenderer trailRenderer;
+    public GameObject explodePrefab;
     public int x, y;
     public int dx, dy;
     public float speed = 6f; //unit per second
@@ -46,11 +46,6 @@ public class Bullet : MonoBehaviour
             
             yield return null;
         }
-        if (world.GetGridObjectAt(newX, newY).type == GridObjectType.Wall)
-        {
-            Destroy(gameObject);
-            yield break;
-        }
 
         transform.position = world.CellToWorldPosition(newX, newY);
         x = newX;
@@ -59,12 +54,30 @@ public class Bullet : MonoBehaviour
         StartCoroutine(FlyCoroutine());
     }
 
+    public void SelfDestroy()
+    {
+        EventManager.BulletDestroy(x, y, this);
+        trailRenderer.transform.parent = this.transform.parent;
+        Destroy(trailRenderer.gameObject, trailRenderer.time);
+        
+        Destroy(gameObject);
+    }
 
+    public void OnHit(int x, int y, Bullet bullet)
+    {
+        if (bullet != this) return;
+        GameObject explode = Instantiate(explodePrefab);
+        explode.transform.parent = transform.parent;
+        explode.transform.position = transform.position;
+        Destroy(explode, 1f);
+    }
 
 
     void Start()
     {
+        trailRenderer = transform.Find("Trail").GetComponent<TrailRenderer>();
         world = World.instance;
+        EventManager.OnBulletHit += OnHit;
         Fly();
     }
 }

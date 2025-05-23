@@ -26,7 +26,7 @@ public class Deflector : GridObject
 
     public void OnHit(Bullet bullet)
     {
-        Debug.Log("Hit");
+        EventManager.BulletHit(x, y, bullet);
         int newDx = -bullet.dy;
         int newDy = bullet.dx;
         bullet.SetDirection(newDx, newDy);

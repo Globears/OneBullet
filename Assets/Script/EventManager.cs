@@ -32,4 +32,16 @@ public class EventManager : MonoBehaviour
     {
         OnShooting?.Invoke(bullet);
     }
+
+    public delegate void BulletHitHandler(int x, int y, Bullet bullet);
+    public static event BulletHitHandler OnBulletHit, OnBulletDestroy;
+
+    public static void BulletHit(int x, int y, Bullet bullet)
+    {
+        OnBulletHit?.Invoke(x, y, bullet);
+    }
+    public static void BulletDestroy(int x, int y, Bullet bullet)
+    {
+        OnBulletDestroy?.Invoke(x, y, bullet);
+    }
 }
