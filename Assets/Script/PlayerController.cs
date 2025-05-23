@@ -12,10 +12,6 @@ public class PlayerController : GridObject
     public float speed = 3f;
     public Animator animator;
 
-    public delegate void MovingHandler(int fromX, int fromY, int newX, int newY);
-    public event MovingHandler MovingStart, MovingFinish;
-    public delegate void ShootingHandler(Bullet bullet);
-    public event ShootingHandler Fire;
 
     IEnumerator MoveCoroutine(int dx, int dy)
     {
@@ -27,7 +23,7 @@ public class PlayerController : GridObject
         int fromX = x;
         int fromY = y;
 
-        MovingStart?.Invoke(fromX, fromY, newX, newY);
+        EventManager.PlayerMovingStart(fromX, fromY, newX, newY);
         x = newX;
         y = newY;
 
@@ -47,8 +43,8 @@ public class PlayerController : GridObject
 
         
         transform.position = world.CellToWorldPosition(x, y);
-        
-        MovingFinish?.Invoke(fromX, fromY, newX, newY);
+
+        EventManager.PlayerMovingFinish(fromX, fromY, newX, newY);
         isAnimatingMove = false;
         yield return null;
     }
@@ -64,7 +60,7 @@ public class PlayerController : GridObject
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-            Fire?.Invoke(bullet);
+            EventManager.Shooting(bullet);
             bullet.x = x;
             bullet.y = y;
             bullet.dx = this.dx;

@@ -11,19 +11,13 @@ public class Deflector : GridObject
     {
         world = World.instance;
         player = PlayerController.instance;
-        
 
-        player.Fire += OnFire;
+
+        EventManager.OnBulletFlyStart += OnBulletFlyingStart;
+        EventManager.OnBulletFlyFinish += OnBulletFlyingFinish;
         
     }
 
-    public void OnFire(Bullet bullet)
-    {
-        this.bullet = bullet;
-        bullet.FlyingStart += OnBulletFlyingStart;
-        bullet.FlyingFinish += OnBulletFlyingFinish;
-        Debug.Log("Fire");
-    }
 
     public void OnGoingTobeHit(Bullet bullet)
     {

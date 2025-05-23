@@ -9,8 +9,8 @@ public class PlayerAnimationController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         player = PlayerController.instance;
-        player.MovingStart += OnPlayerMovingStart;
-        player.MovingFinish += OnPlayerMovingFinish;
+        EventManager.OnPlayerMovingStart += OnPlayerMovingStart;
+        EventManager.OnPlayerMovingFinish += OnPlayerMovingFinish;
 
         animator.Play("IdleDown");
     }

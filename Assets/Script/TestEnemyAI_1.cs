@@ -9,7 +9,7 @@ public class TestEnemyAI_1 : GridObject
     {
         world = World.instance;
         player = PlayerController.instance;
-        player.MovingStart += OnPlayerMovingStart;
+        EventManager.OnPlayerMovingStart += OnPlayerMovingStart;
     }
 
     // Update is called once per frame

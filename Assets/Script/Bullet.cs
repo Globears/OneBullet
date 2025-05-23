@@ -14,8 +14,6 @@ public class Bullet : MonoBehaviour
     public int dx, dy;
     public float speed = 6f; //unit per second
 
-    public delegate void FlyingHandler(int fromX, int fromY, int newX, int newY, Bullet bullet);
-    public event FlyingHandler FlyingStart, FlyingFinish;
 
 
 
@@ -38,7 +36,7 @@ public class Bullet : MonoBehaviour
         int newX = x + dx;
         int newY = y + dy;
 
-        FlyingStart?.Invoke(fromX, fromY, newX, newY, this);
+        EventManager.BulletFlyStart(fromX, fromY, newX, newY, this);
         while (true)
         {
             Vector3 targetPosition = world.CellToWorldPosition(newX, newY);
@@ -57,7 +55,7 @@ public class Bullet : MonoBehaviour
         transform.position = world.CellToWorldPosition(newX, newY);
         x = newX;
         y = newY;
-        FlyingFinish?.Invoke(fromX, fromY, newX, newY, this);
+        EventManager.BulletFlyFinish(fromX, fromY, newX, newY, this);
         StartCoroutine(FlyCoroutine());
     }
 
