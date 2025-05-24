@@ -17,11 +17,11 @@ public class Wall : GridObject
         if (this.x == newX && this.y == newY)
         {
             EventManager.BulletHit(x, y, bullet);
-            OnBulletHit(bullet);
+            OnHit(bullet);
         }
     }
 
-    public void OnBulletHit(Bullet bullet)
+    public void OnHit(Bullet bullet)
     {
         bullet.SelfDestroy();
     }

@@ -44,4 +44,6 @@ public class EventManager : MonoBehaviour
     {
         OnBulletDestroy?.Invoke(x, y, bullet);
     }
+
+    
 }
